@@ -1,0 +1,12 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { ArrowLeft, ArrowUpRight } from 'lucide-vue-next'
+import { RouterLink, useRoute } from 'vue-router'
+import { projects } from '../data/portfolio'
+const route = useRoute()
+const project = computed(() => projects.find((item) => item.slug === route.params.slug))
+</script>
+<template>
+  <div v-if="project"><section class="section project-detail-hero"><RouterLink class="text-link project-back-link" to="/projects"><ArrowLeft :size="16" /> Back to projects</RouterLink><p class="eyebrow">{{ project.eyebrow }}</p><h1 class="display">{{ project.title }}<span class="serif">.</span></h1><p class="hero-intro">{{ project.description }}</p></section><section class="section split-section"><div><p class="eyebrow">Overview</p><p class="big-copy" v-html="project.overviewLead"></p></div><div><p v-for="paragraph in project.overviewCopy" :key="paragraph" class="manifesto">{{ paragraph }}</p><div class="tags"><span v-for="tag in project.technologies" :key="tag" class="tag">{{ tag }}</span></div><a v-if="project.liveUrl" class="text-link project-live-link" :href="project.liveUrl" target="_blank" rel="noreferrer">Visit live site <ArrowUpRight :size="16" /></a></div></section><section v-if="project.images?.length" class="section project-gallery"><div class="section-heading"><div><p class="eyebrow">Project overview</p><h2 class="section-title">See the system<br><span class="serif">in action.</span></h2></div><span class="project-meta">{{ project.images.length }} screens</span></div><div class="project-gallery-grid"><figure v-for="image in project.images" :key="image.src" class="project-gallery-item"><img :src="image.src" :alt="image.alt" loading="lazy" decoding="async"></figure></div></section><section class="section"><div class="section-heading"><div><p class="eyebrow">The details</p><h2 class="section-title" v-html="project.detailsTitle"></h2></div><span class="project-meta">{{ project.year }} / {{ project.role }} / {{ project.detailsSubtitle }}</span></div></section><section class="cta"><h2>Make room for<br><span class="serif">better.</span></h2><RouterLink class="text-link" to="/contact">Start a conversation <ArrowUpRight :size="18" /></RouterLink></section></div>
+  <section v-else class="section"><p class="eyebrow">404 · Project missing</p><h1 class="display">Nothing<br><span class="serif">here.</span></h1><RouterLink class="text-link" to="/projects">Back to projects <ArrowUpRight :size="16" /></RouterLink></section>
+</template>
